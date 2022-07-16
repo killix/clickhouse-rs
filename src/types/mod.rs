@@ -196,7 +196,6 @@ has_sql_type! {
     DateTime<Tz>: SqlType::DateTime(DateTimeType::DateTime32)
 }
 
-
 impl<K, V> HasSqlType for HashMap<K, V>
 where
     K: HasSqlType,
@@ -209,6 +208,18 @@ where
         )
     }
 }
+
+impl<V> HasSqlType for Vec<V>
+where
+    V: HasSqlType,
+{
+    fn get_sql_type() -> SqlType {
+        SqlType::Array(
+            V::get_sql_type().into(),
+        )
+    }
+}
+
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub enum DateTimeType {
